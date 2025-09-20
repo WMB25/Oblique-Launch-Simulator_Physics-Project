@@ -62,4 +62,5 @@ with open("lancamento_obliquo.csv", "w", newline='') as file:
 
     for point in positions:
         writer.writerow([round(point[0], 3), round(point[1], 3), round(point[2], 3)])
+        
     print("Dados salvos em 'lancamento_obliquo.csv'")
