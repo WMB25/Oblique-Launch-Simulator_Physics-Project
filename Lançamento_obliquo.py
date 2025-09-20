@@ -9,16 +9,14 @@ DRAG_COEFFICIENT = 0.47
 AIR_DENSITY = 1.225
 
 velocity = float(input("Digite a velocidade inicial (m/s): "))
-angle = float(input("Digite o ângulo de lançamento (graus): "))
+angle = math.radians(float(input("Digite o ângulo de lançamento (graus): ")))
 time_step = float(input("Digite o intervalo de tempo para cálculo (s): "))
 
 def launch_oblique(velocity, angle, time_step):
-    angle_rad = math.radians(angle)
-
     x, y, time = 0.0, 0.0, 0.0
 
-    velocity_x = velocity * math.cos(angle_rad)
-    velocity_y = velocity * math.sin(angle_rad)
+    velocity_x = velocity * math.cos(angle)
+    velocity_y = velocity * math.sin(angle)
     
     positions = []
 
