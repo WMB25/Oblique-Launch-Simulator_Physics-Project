@@ -2,6 +2,7 @@ let angle_arrow;
 let height_arrow;
 let velocity_slider;
 let drag_slider;
+let mass_slider;
 
 const initial_line_x = 15;
 const final_line_y = 700;
@@ -12,6 +13,7 @@ let gravity = 9.8;
 let time = 0;
 let launched = false;
 let drag_coefficient = 0.01;
+let mass = 1;
 
 let pos_x, pos_y;
 let vx, vy;
@@ -24,6 +26,7 @@ function setup() {
   height_arrow = createSlider(50, 700, 700);  
   velocity_slider = createSlider(10, 200, 100);
   drag_slider = createSlider(0,100, 1);
+  mass_slider = createSlider(1, 20, 1);
 
   angle_arrow.position(10, 10);
   height_arrow.position(10, 40);
@@ -80,9 +83,8 @@ function start_launch() {
   let angle_radians = radians(angle_arrow.value());
   pos_x = initial_line_x;
   pos_y = height_arrow.value();
-
+  
   velocity = velocity_slider.value();
-
   vx = velocity * cos(angle_radians);
   vy = -velocity * sin(angle_radians);
 }
@@ -96,8 +98,8 @@ function Simulate_projectile() {
   let drag_x = -drag_coefficient * vx * v;
   let drag_y = -drag_coefficient * vy * v;
 
-  let ax = drag_x;
-  let ay = gravity + drag_y;
+  let ax = drag_x/mass;
+  let ay = (mass * gravity + drag_y)/ mass;
 
   vx += ax * dt;
   vy += ay * dt;
@@ -134,5 +136,19 @@ function Shoe_labels()
   text("Altura: " + height_arrow.value() + " px", height_arrow.x * 2 + height_arrow.width, 55);
   text("Velocidade: " + velocity_slider.value() + " m/s", velocity_slider.x + velocity_slider.width + 10, velocity_slider.y + 15);
   text("Arrasto: " + nf(drag_coefficient, 1, 3), drag_slider.x + drag_slider.width + 10, drag_slider.y + 15);
+  text("Massa: " + mass_slider.value() + "kg", mass_slider.x + mass_slider.width + 10, mass_slider.y + 15);
+  
+  let v = sqrt(vx*vx + vy*vy);
+  let force = mass * sqrt((drag_coefficient * vx * v)**2 + (mass*gravity + drag_coefficient * vy * v)**2);
+  
+  let kinetic = 0.5 * mass * v * v;
+  let height = final_line_y - pos_y;
+  let potential = mass * gravity * height;
+  let total_energy = kinetic + potential;
+
+  text("Força resultante: " + nf(force, 1, 2) + " N", 600, 25);
+  text("Energia Cinética: " + nf(kinetic, 1, 2) + " J", 600, 45);
+  text("Energia Potencial: " + nf(potential, 1, 2) + " J", 600, 65);
+  text("Energia Mecânica: " + nf(total_energy, 1, 2) + " J", 600, 85);
 
 }
